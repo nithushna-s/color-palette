@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Palette Generator</title>
+  <!-- Include Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      background-color: #3b9c9e;
+      color:#ecf1ee;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      margin-top: 10%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+
+    }
+
+    #colorPaletteContainer {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+      padding: 10px;
+      background-color: rgb(244, 247, 248);
+      background-color: white;
+    }
+
+    .color-box {
+      width: 100px;
+      height: 130px;
+      margin: 10px;
+      border-radius: 30%;
+      border: 5px ridge;
+      display: inline-block;
+      cursor: pointer;
+      position: relative;
+      box-shadow:  9px 9px rgba(0, 0, 0, 0.1); 
+    }
+
+    .color-code {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      color: darkslategray;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+
+    }
+
+    .fa-icon {
+
+      font-size: 24px;
+      cursor: pointer;
+      margin-left: 49%;
+      align-self: flex-start; /* Align the refresh icon to the left */
+    }
+  </style>
+</head>
+<body>
+   
+  <h1>Color Palette</h1>
+  <i class="fas fa-sync fa-icon" onclick="refreshColors()"></i> <br>
+
+  <div id="colorPaletteContainer"></div>
+
+  <script>
+    // JavaScript code for generating and refreshing color palette
+    function generateRandomColor() {
+      return '#' + Math.floor(Math.random()*16777215).toString(16);
+    }
+
+    function generateColorPalette(numColors) {
+      const colorPalette = [];
+      for (let i = 0; i < numColors; i++) {
+        colorPalette.push(generateRandomColor());
+      }
+      return colorPalette;
+    }
+
+    function displayColorPalette(colorPalette) {
+      const container = document.getElementById('colorPaletteContainer');
+      container.innerHTML = ''; // Clear previous color boxes
+
+      colorPalette.forEach(color => {
+        const colorBox = document.createElement('div');
+        colorBox.className = 'color-box';
+        colorBox.style.backgroundColor = color;
+
+        const colorCode = document.createElement('div');
+        colorCode.className = 'color-code';
+        colorCode.textContent = color;
+
+        colorBox.addEventListener('click', function() {
+          copyToClipboard(color);
+          colorCode.style.display = 'block';
+        });
+
+        colorBox.appendChild(colorCode);
+        container.appendChild(colorBox);
+      });
+    }
+
+    async function copyToClipboard(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        console.log('Color code copied to clipboard: ' + text);
+      } catch (err) {
+        console.error('Unable to copy to clipboard', err);
+      }
+    }
+
+    const numColors = 12;
+
+    displayColorPalette(generateColorPalette(numColors));
+
+    function refreshColors() {
+      displayColorPalette(generateColorPalette(numColors));
+    }
+  </script>
+</body>
+</html>
